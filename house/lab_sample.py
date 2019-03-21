@@ -42,19 +42,29 @@ import graphics as gr
 
 window = gr.GraphWin("Jenkslex and Ganzz project", 400, 400)
 
-def draw_left_eye():
-    eye = gr.Circle(gr.Point(150, 180), 20)
-    pupil = gr.Circle(gr.Point(150, 180), 10)
+# def draw_left_eye():
+#     eye = gr.Circle(gr.Point(150, 180), 20)
+#     pupil = gr.Circle(gr.Point(150, 180), 10)
 
-    eye.setFill('red')
-    pupil.setFill('black')
+#     eye.setFill('red')
+#     pupil.setFill('black')
 
-    eye.draw(window)
-    pupil.draw(window)
+#     eye.draw(window)
+#     pupil.draw(window)
 
-def draw_right_eye():
-    eye = gr.Circle(gr.Point(250, 180), 14)
-    pupil = gr.Circle(gr.Point(250, 180), 7)
+# def draw_right_eye():
+#     eye = gr.Circle(gr.Point(250, 180), 14)
+#     pupil = gr.Circle(gr.Point(250, 180), 7)
+
+#     eye.setFill('red')
+#     pupil.setFill('black')
+
+#     eye.draw(window)
+#     pupil.draw(window)
+
+def draw_eye(x, y, size):
+    eye = gr.Circle(gr.Point(x, y), size)
+    pupil = gr.Circle(gr.Point(x, y), size/2)
 
     eye.setFill('red')
     pupil.setFill('black')
@@ -92,8 +102,8 @@ def draw_mouth():
 def draw_angry_lecturer():
     draw_face()
     draw_mouth()
-    draw_left_eye()
-    draw_right_eye()
+    draw_eye(150, 180, 20)
+    draw_eye(250, 180, 14)
     draw_eyebrows()
 
 draw_angry_lecturer()
