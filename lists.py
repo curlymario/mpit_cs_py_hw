@@ -96,30 +96,47 @@
 # test_invert_array()
 
 
-# ==== Циклический свдиг влево ====
-def move_array_left(A, N):
-    tmp = A[0]
-    for k in range (N-1):
-        A[k] = A[k+1]
-    A[N-1] = tmp
+# # ==== Циклический свдиг влево ====
+# def move_array_left(A, N):
+#     tmp = A[0]
+#     for k in range (N-1):
+#         A[k] = A[k+1]
+#     A[N-1] = tmp
 
-# ==== Циклический свдиг вправо ====
-def move_array_right(A, N):
-    tmp = A[N-1]
-    for k in range (N-2, -1, -1):
-        A[k+1] = A[k]
-    A[0] = tmp
+# # ==== Циклический свдиг вправо ====
+# def move_array_right(A, N):
+#     tmp = A[N-1]
+#     for k in range (N-2, -1, -1):
+#         A[k+1] = A[k]
+#     A[0] = tmp
 
 
-# ==== Решето Эратосфена ====
-def erathosphen(N):
-    """ Находит все простые числа до N-1 включительно
-    """
-    A = [True] * N
-    A[0] = A[1] = False
-    for k in range(2, N):
-        if A[k]: 
-            for m in range (2*k, N, k):
-                A[m] = False
-    for k in range(N):
-        print(k, "—", "простое" if A[k] else "составное")
+# # ==== Решето Эратосфена ====
+# def erathosphen(N):
+#     """ Находит все простые числа до N-1 включительно
+#     """
+#     A = [True] * N
+#     A[0] = A[1] = False
+#     for k in range(2, N):
+#         if A[k]: 
+#             for m in range (2*k, N, k):
+#                 A[m] = False
+#     for k in range(N):
+#         print(k, "—", "простое" if A[k] else "составное")
+
+
+# ==== List Comprehensions ====
+
+A = [x**2 for x in range(10)]
+
+A = []
+for x in range(10):
+    A.append(x**2)
+
+B = [1, 2, 3, 4, 5, 7, 12, 9, 6]
+C = []
+for x in A:
+    if x % 2 == 0:
+        C.append(x**2)
+
+C = [x**2 for x in A if x % 2 == 0]
