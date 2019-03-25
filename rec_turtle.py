@@ -1,6 +1,9 @@
 import turtle as t
 
 t.speed('fastest')
+t.penup()
+t.goto(-100, 50)
+t.pendown()
 
 
 # # ==== Факториал ====
@@ -149,7 +152,7 @@ def dragon(x, n, turn=False):
         dragon(x*0.75, n-1, True)
         t.left(45)
 
-# dragon(100, 20)
+dragon(200, 10)
 
 
 # ==== Канторово множество ====
@@ -173,4 +176,4 @@ def kantor(x, n):
         t.forward(20)
         t.right(90)
         
-kantor(300, 5)
+# kantor(300, 5)
