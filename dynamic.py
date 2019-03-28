@@ -61,7 +61,7 @@ def count_trajectories_3(N):
         K[i] = K[i - 3] + K[i - 2] + K[i - 1]
     return K[N]
 
-def count_trajectories_3(N):
+def count_trajectories_x3(N):
     """ Кузнечик имеет два варианта хода: +1, +2, *3
         Функция возвращает, сколько есть траекторий пути от 1 до N
     """ 
