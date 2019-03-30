@@ -9,7 +9,7 @@ def left_bound(A:list, key):
             right = middle
     return left
 
-    def right_bound(A:list, key):
+def right_bound(A:list, key):
     left = -1
     right = len(A)
     while right - left > 1:
