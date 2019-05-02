@@ -98,7 +98,7 @@ def find_winning_steps_queen(M, N):
     print("===========================")
     return A
 
-find_winning_steps_queen(6, 6)
+# find_winning_steps_queen(6, 6)
 
 
 # ==== Лекция 12 ====
@@ -213,3 +213,27 @@ def z_func_trivial(s, n):
 
 # т.о. есть два случая, к-е отличаются только инициацией z[i], а дальше тривиальный алгоритм
 # тем не менее, такой вариант выполняется за линейное время
+
+# упражнение 1
+def z_func(s, n):
+    z = [0] * n
+    l, r = 0, 0
+    for i in range(1, n-1):
+        if i <= r:
+            z[i] = min(r-i+1, z[i-l])
+        while i + z[i] < n and s[z[i]] == s[i + z[i]]:
+            z[i] += 1
+            if i + z[i] - 1 > r:
+                l = i
+                r = i + z[i]
+    return z
+            
+# print(z_func_trivial("aaaaa", 5))
+# print(z_func("aaaaa", 5))
+# print("===========")
+# print(z_func_trivial("aaabaab", 7))
+# print(z_func("aaabaab", 7))
+# print("===========")
+# print(z_func_trivial("abacaba", 7))
+# print(z_func("abacaba", 7))
+# print("===========")
