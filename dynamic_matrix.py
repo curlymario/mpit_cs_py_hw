@@ -265,3 +265,25 @@ def find_sub(S, sub):
 
 # упражнение 4
 
+# === Ещё раз КМП ===
+# Дана строка s длины n
+# PI(s) — массив длины n
+# PI[i] = длина наибольшего общего суффикса подстроки s[0…i], совпадающего с её префиксом
+# PI[0] = 0
+# математическое определение:
+# π[i] = max(k=0…i) { k : s[0…k−1] = s[i−k+1…i] }.
+
+# Тривиальный алгоритм (по определению) [ O(n^3) ] :
+def prefix_func_trivial(s, n):
+    pi = [0]*n
+    for i in range(n-1):
+        for k in range(1, i+1):
+            equal = True
+            for j in range (k):
+                if s[j] != s[i - k + 1 + j]:
+                    equal = False
+                    break
+            if equal:
+                pi[i] = k
+    return pi
+
