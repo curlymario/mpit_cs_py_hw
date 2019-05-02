@@ -174,6 +174,8 @@ def search_substring_naive(S, sub):
 # В те моменты, когда Пi == len(sub)) —> мы нашли вхождение подстроки в строке
 # Индекс вхождения: i - len(sub)
 
+
+
 # === Практикум ===
 
 # === Z-функция ===
@@ -259,4 +261,7 @@ def find_sub(S, sub):
 
 # print(find_sub("abacabadabacabafabacabadabacabafabacabadabacaba", "dabac"))
                 
+# упражнение 3
+
+# упражнение 4
 
