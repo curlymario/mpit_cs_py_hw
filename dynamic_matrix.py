@@ -147,7 +147,7 @@ def equal(A, B):    # —> A == B
 
 def search_substring_naive(S, sub):
     for i in range(0, len(S)-len(sub)):
-        if equal(S[:i+len(sub)], sub):
+        if equal(S[i:i+len(sub)], sub):
             print(i)
 
 # Префикс функция П строки
@@ -237,3 +237,26 @@ def z_func(s, n):
 # print(z_func_trivial("abacaba", 7))
 # print(z_func("abacaba", 7))
 # print("===========")
+
+# упражнение 2
+# поиск подстроки в строке — найти все вхождения
+# def equal(A, B):    # —> A == B
+#     if len(A) != len(B):
+#         return False
+#     for i in range(len(A)):
+#         if A[i] != B[i]:
+#             return False
+#     return True
+def find_sub(S, sub):
+    """ Находит все вхождения подстроки sub в строке S
+        возвращает список индексов начала подстроки
+    """
+    enter = []
+    for i in range(len(S)-len(sub)):
+        if equal(S[i:i+len(sub)], sub):
+            enter.append(i)
+    return(enter)
+
+# print(find_sub("abacabadabacabafabacabadabacabafabacabadabacaba", "dabac"))
+                
+
