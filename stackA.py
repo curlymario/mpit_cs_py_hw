@@ -63,7 +63,7 @@ False
 True
 """
 
-_stack = ()
+_stack = []
 
 
 def push(x):
