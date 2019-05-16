@@ -13,3 +13,22 @@
 # stack.puzh(z)
 
 # result = stack.pop()
+
+# === Стековый калькулятор ===
+import stackA.py
+
+def calc(expression:list):
+    """ Takes an expression as a list of numbers and operations
+    Calculates operations and returns final result as int
+    TODO: exceptions and errors
+    """
+    stack = []
+    for token in expression:
+        if isinstance(token, int):
+            stack.append(token)
+        else:
+            y = stack.pop()
+            x = stack.pop()
+            z = eval('{} {} {}'.format(x, token, y))
+            stack.append(z)
+    return stack.pop()
