@@ -67,7 +67,30 @@ def is_braces_sequence_correct(s:str) -> bool:
     >>> is_braces_sequence_correct(")")
     False
     """
-    return True
+    for brace in s:
+        if brace not in "()[]":
+            continue    # игнорирование лишних символов
+        if brace in "([":
+            stackA.push(brace)
+        else:
+            assert brace in ")]", "Ожидалась закрывающая скобка: " + str(brace)
+            if stackA.is_empty():
+                return False
+            left = stackA.pop()
+            assert left in "([", "Ожидалась открывающая скобка: " + str(left)
+            if left == "(":
+                right = ")"
+            elif left == "[":
+                right = "]"
+            # else:
+            #     raise Exception
+            if right != brace:
+                return False
+    # if stackA.is_empty():
+    #     return True
+    # else:
+    #     return False
+    return stackA.is_empty()
 
 if __name__ == "__main__":
     import doctest
