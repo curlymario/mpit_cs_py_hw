@@ -39,6 +39,40 @@ def calc(expression:list):
             stack.append(z)
     return stack.pop()
 
+# TODO нужно разделить строку на составляющие токены — отдельный алгоритм, на выходе список токенов
+
+# === Сортировочная станция Дейкстры ===
+
+# определяем, является элемент числом или оператором
+# если операнд (число) — сохраняем в итоговый список
+# если оператор — сохраняем во внутренний стэк операторов
+# каждый следующий оператор сравниваем с оператором в стэке
+# задать приоритет выражений и понятие левой ассоциации (можно ли заменить это приоритетом?) 
+# типа * > / > + > -
+
+def shunting_yard(expression:list) -> list:
+    """
+    >>> A = shunting_yard([5, "+", 2])
+    >>> print(A)
+    [5, 2, '+']
+    >>> A = shunting_yard([2, "+", 7, "*", 5])
+    >>> print(A)
+    [2, 7, 5, '*', '+']
+    """
+    output = []
+    op_stack = []
+    op_priority = {"-": 0, "+": 1, "/": 2, "*": 3}
+    for token in expression:
+        if isinstance(token, int):
+            output.append(token)                                                 # все числа сразу кладём в результат
+        if token in op_priority.keys():
+            while op_stack and op_priority[op_stack[-1]] > op_priority[token]:   # если в стэке есть операторы с приоритетом выше, чем у следующего в выражении
+                output.append(op_stack.pop())                                    # вынимает операторы из стэка в результат
+            op_stack.append(token)                                               # потом кладём туда операторы с приоритетом ниже
+    while op_stack:
+        output.append(op_stack.pop())                                            # вынимаем оставшиеся операторы в результат
+    return output
+
 
 
 
