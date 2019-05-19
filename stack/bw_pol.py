@@ -20,6 +20,13 @@ def calc(expression:list):
     """ Takes an expression as a list of numbers and operations
     Calculates operations and returns final result as int
     TODO: exceptions and errors
+
+    >>> calc([5, 2, "+"])
+    7
+    >>> calc([2, 7, "+", 5, "*"])
+    45
+    >>> calc([2, 7, 5, "*", "+"])
+    37
     """
     stack = []
     for token in expression:
@@ -31,3 +38,11 @@ def calc(expression:list):
             z = eval('{} {} {}'.format(x, token, y))
             stack.append(z)
     return stack.pop()
+
+
+
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
