@@ -15,7 +15,6 @@
 # result = stack.pop()
 
 # === Стековый калькулятор ===
-import stackA.py
 
 def calc(expression:list):
     """ Takes an expression as a list of numbers and operations
