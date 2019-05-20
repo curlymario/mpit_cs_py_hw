@@ -32,11 +32,21 @@ def calc(expression:list):
     for token in expression:
         if isinstance(token, int):
             stack.append(token)
-        else:
+        elif token in ["+", "-", "/", "*"]:
+            if len(stack) < 2:
+                raise ValueError("Number expected. Wrong notation used")
             y = stack.pop()
             x = stack.pop()
             z = eval('{} {} {}'.format(x, token, y))
             stack.append(z)
+        else:
+            raise ValueError("Should only contain integers or operation string")
+    if not stack:
+        raise ValueError("Expression is empty: no value could be calculated")
+    if not isinstance(stack[-1], int):
+        raise ValueError("Number expected. Wrong notation used")
+    if len(stack) > 1:
+        raise ValueError("Unexpected token in stack. Wrong notation used")
     return stack.pop()
 
 # TODO нужно разделить строку на составляющие токены — отдельный алгоритм, на выходе список токенов
