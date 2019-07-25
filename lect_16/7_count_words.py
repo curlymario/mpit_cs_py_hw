@@ -5,9 +5,8 @@ def import_text(rel_path) -> str:
         Выдаём строку
         TODO: Сделать отдельную функцию для проверки и получения абсолютного адреса файла
         TODO: Обработать исключения (файл не найден)
-
-    >>> import_text("test_file.txt")
-    'text,\nsome text'
+    >>> import_text('test_file.txt')
+    'text, some text'
     """
     import os
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -22,15 +21,15 @@ def strip_punct(text):
     """ Компилируем punc = re.compile(string.punctuation)
         Заменяем пунктуацию на пробелы text = puncsub(" ", text)
         Выдаём текст с пробелами без пунктуации
-    #>>> strip_punct("hi, my name is Maxim! Nice to meet you ;)")
-    #"hi my name is Maxim Nice to meet you "
+    >>> strip_punct("hi, my name is Maxim! Nice to meet you ;)")
+    'hi my name is Maxim Nice to meet you '
     """  
     import re
     import string
 
-    punct = re.compile(string.punctuation)
+    punct = re.compile('[%s]' % re.escape(string.punctuation))
     text = punct.sub("", text)
-
+    
     return text
 
 def count_words(text):
@@ -54,3 +53,4 @@ def top_10(dict):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+    strip_punct("hi, my name is Maxim! Nice to meet you ;)")
