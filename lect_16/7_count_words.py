@@ -1,4 +1,4 @@
-# ========== Подсчёт слов =========== 
+# ========== Подсчёт слов ===========
 
 def import_text(rel_path) -> str:
     """ Вводим текст из файла (относительный адрес)
@@ -23,14 +23,15 @@ def strip_punct(text):
         Выдаём текст с пробелами без пунктуации
     >>> strip_punct("hi, my name is Maxim! Nice to meet you ;)")
     'hi my name is Maxim Nice to meet you '
-    """  
+    """
     import re
     import string
 
     punct = re.compile('[%s]' % re.escape(string.punctuation))
     text = punct.sub("", text)
-    
+
     return text
+
 
 def count_words(text):
     """ Берёт текст без знаков препинания
@@ -43,6 +44,7 @@ def count_words(text):
     """
     pass
 
+
 def top_10(dict):
     """ Берём словарь (создаём его копию? Можно ли избежать изменения оригинального словаря?)
         Пробегаем по всем ключам и находим ключ с максимальным значением
@@ -50,7 +52,9 @@ def top_10(dict):
     """
     pass
 
+
 if __name__ == "__main__":
     import doctest
+
     doctest.testmod()
     strip_punct("hi, my name is Maxim! Nice to meet you ;)")
