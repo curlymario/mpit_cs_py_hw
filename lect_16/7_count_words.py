@@ -1,4 +1,6 @@
 # ========== Подсчёт слов ===========
+from typing import Dict, Any
+
 
 def import_text(rel_path) -> str:
     """ Вводим текст из файла (относительный адрес)
@@ -39,10 +41,17 @@ def count_words(text):
         Если нет в словаре, сохраняет в словарь с ключём из слова и значением 1
         Если есть в словаре, значение += 1
         На выходе словарь
-    # >>> count_words("hi my name is Maxim it is Nice to meet you ")
-    # {'hi': 1, 'my': 1, 'name': 1, 'is': 2, 'Maxim': 1, 'it': 1, Nice': 1, 'to': 1, 'meet': 1, 'you': 1}
+    >>> count_words("hi my name is Maxim it is Nice to meet you ")
+    {'hi': 1, 'my': 1, 'name': 1, 'is': 2, 'Maxim': 1, 'it': 1, 'Nice': 1, 'to': 1, 'meet': 1, 'you': 1}
     """
-    pass
+    table: Dict[str, int] = dict()
+    list_of_words = text.split()
+    for word in list_of_words:
+        if word not in table.keys():
+            table[word] = 1
+        else:
+            table[word] += 1
+    return table
 
 
 def top_10(dict):
