@@ -54,12 +54,20 @@ def count_words(text):
     return table
 
 
-def top_10(dict):
+def top_10(table):
     """ Берём словарь (создаём его копию? Можно ли избежать изменения оригинального словаря?)
         Пробегаем по всем ключам и находим ключ с максимальным значением
         Делаем так 10 раз, ? каждый раз удаляя предыдущее топ значение ?
+    >>> top_10({'hi': 1, 'my': 2, 'name': 3, 'is': 4, 'Maxim': 1, 'it': 5, 'Nice': 1, 'to': 1, 'meet': 9, 'you': 1, 'me': 1})
+    ['meet', 'it', 'is', 'name', 'my', 'hi', 'Maxim', 'Nice', 'to', 'you']
     """
-    pass
+    list_of_words = []
+    table_to_sort = table.copy()
+    for _ in range(0, 10):
+        word = max(table_to_sort, key=table_to_sort.get)
+        table_to_sort.pop(word)
+        list_of_words.append(word)
+    return list_of_words
 
 
 if __name__ == "__main__":
