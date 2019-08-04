@@ -42,8 +42,9 @@ def count_words(text):
         Если есть в словаре, значение += 1
         На выходе словарь
     >>> count_words("hi my name is Maxim it is Nice to meet you ")
-    {'hi': 1, 'my': 1, 'name': 1, 'is': 2, 'Maxim': 1, 'it': 1, 'Nice': 1, 'to': 1, 'meet': 1, 'you': 1}
+    {'hi': 1, 'my': 1, 'name': 1, 'is': 2, 'maxim': 1, 'it': 1, 'nice': 1, 'to': 1, 'meet': 1, 'you': 1}
     """
+    text = text.lower()
     table: Dict[str, int] = dict()
     list_of_words = text.split()
     for word in list_of_words:
@@ -58,8 +59,8 @@ def top_10(table):
     """ Берём словарь (создаём его копию? Можно ли избежать изменения оригинального словаря?)
         Пробегаем по всем ключам и находим ключ с максимальным значением
         Делаем так 10 раз, ? каждый раз удаляя предыдущее топ значение ?
-    >>> top_10({'hi': 1, 'my': 2, 'name': 3, 'is': 4, 'Maxim': 1, 'it': 5, 'Nice': 1, 'to': 1, 'meet': 9, 'you': 1, 'me': 1})
-    ['meet', 'it', 'is', 'name', 'my', 'hi', 'Maxim', 'Nice', 'to', 'you']
+    >>> top_10({'hi': 1, 'my': 2, 'name': 3, 'is': 4, 'maxim': 1, 'it': 5, 'nice': 1, 'to': 1, 'meet': 9, 'you': 1, 'me': 1})
+    ['meet', 'it', 'is', 'name', 'my', 'hi', 'maxim', 'nice', 'to', 'you']
     """
     list_of_words = []
     table_to_sort = table.copy()
@@ -74,4 +75,3 @@ if __name__ == "__main__":
     import doctest
 
     doctest.testmod()
-    strip_punct("hi, my name is Maxim! Nice to meet you ;)")
