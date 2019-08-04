@@ -60,14 +60,15 @@ def top_10(table):
         Пробегаем по всем ключам и находим ключ с максимальным значением
         Делаем так 10 раз, ? каждый раз удаляя предыдущее топ значение ?
     >>> top_10({'hi': 1, 'my': 2, 'name': 3, 'is': 4, 'maxim': 1, 'it': 5, 'nice': 1, 'to': 1, 'meet': 9, 'you': 1, 'me': 1})
-    ['meet', 'it', 'is', 'name', 'my', 'hi', 'maxim', 'nice', 'to', 'you']
+    ['meet: 9', 'it: 5', 'is: 4', 'name: 3', 'my: 2', 'hi: 1', 'maxim: 1', 'nice: 1', 'to: 1', 'you: 1']
     """
     list_of_words = []
     table_to_sort = table.copy()
     for _ in range(0, 10):
         word = max(table_to_sort, key=table_to_sort.get)
+        result = f"{word}: {table_to_sort[word]}"
         table_to_sort.pop(word)
-        list_of_words.append(word)
+        list_of_words.append(result)
     return list_of_words
 
 
