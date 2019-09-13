@@ -13,7 +13,7 @@ def import_list(file_path) -> dict:
     for line in file.iter_lines(decode_unicode=True):
         dict_entry = line.split(" : ")
         country = dict_entry[0]
-        language = (*dict_entry[1].split(" "), )
+        language = {*dict_entry[1].split(" "), }
         datalist[country] = language
 
     return datalist
