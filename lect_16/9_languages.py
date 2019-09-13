@@ -3,21 +3,22 @@
 def import_dict(file_path) -> dict:
     """ Вводим текст из удалённого файла (ссылка на файл, str)
         Выдаём словарь (dict):
-        Ключ: язык (str)
-        Значение: страна(ы) (str)
+        Ключ: страна (str)
+        Значение: языки (str или tuple(str))
     """
     pass
 
-def find_countries(language) -> str:
+def find_countries(language, dictionary) -> str:
     """ Получает имя языка (str)
+        Ищем совпадения среди значений словаря
         Выдаёт страну(ы) (str)
     """
     pass
 
-def get_lang_list():
+def get_lang_list(dictionary):
     """ Пользовательский ввод языков:
         Получает размер списка
         Получает поочерёдно названия языков
-        Выводит список стран
+        Выводит список стран согласно словарю
     """
     pass
