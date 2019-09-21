@@ -18,8 +18,14 @@ def update_dict(target, source) -> dict:
     pass
 
 def export_dict(dictionary, target_file):
-    """ Сохраняем полученный словарь в файл """
-    pass
+    """ Получает словарь, сортирует и сохраняет в файл """
+    dict_lines = ["\t-\t".join((key, ", ".join(value))) for key, value in dictionary.items()]
+    dict_lines.sort()
+    file = open(target_file, "w+", encoding="utf8")
+    for line in dict_lines:
+        file.write(line + "\n")
+    file.close()
+    return dict_lines
 
 if __name__ == "__main__":
     en_ru = import_dict('http://judge.mipt.ru/mipt_cs_on_python3/extra/lab17/task7/en-ru.txt')
