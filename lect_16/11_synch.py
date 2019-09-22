@@ -1,12 +1,23 @@
 # ========== Синхронизация словарей ===========
 
+import requests
+
 def import_dict(file_path) -> dict:
     """ Вводим текст из удалённого файла
         Выдаём словарь, где:
         key -> str
         value -> list
     """
-    pass
+
+    file = requests.get(file_path)
+    dictionary = dict()
+    for line in file.iter_lines(decode_unicode=True):
+        words = line.split("\t-\t")
+        term = words[0]
+        translation = words[-1].split(",")
+        dictionary[term] = translation
+
+    return dictionary
 
 def update_dict(target, source) -> dict:
     """ Берём два словаря
