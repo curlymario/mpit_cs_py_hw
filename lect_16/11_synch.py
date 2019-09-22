@@ -26,7 +26,15 @@ def update_dict(target, source) -> dict:
         если таковых в нём нет
         Возвращаем обновлённый словарь target
     """
-    pass
+    new_dict = target
+    for original_word, translation in source.items():
+        for translated_word in translation:
+            if translated_word not in new_dict:
+                new_dict[translated_word] = [original_word, ]
+            elif original_word not in new_dict[translated_word]:
+                new_dict[translated_word].append(original_word)
+                new_dict[translated_word].sort()
+    return new_dict
 
 def export_dict(dictionary, target_file):
     """ Получает словарь, сортирует и сохраняет в файл """
@@ -43,7 +51,7 @@ if __name__ == "__main__":
     ru_en = import_dict('http://judge.mipt.ru/mipt_cs_on_python3/extra/lab17/task7/ru-en.txt')
     en_ru_updated = update_dict(en_ru, ru_en)
     ru_en_updated = update_dict(ru_en, en_ru)
-    export_dict(en_ru, "en-ru.txt")
-    export_dict(ru_en, "ru-en.txt")
+    export_dict(en_ru_updated, "en-ru.txt")
+    export_dict(ru_en_updated, "ru-en.txt")
 
 
