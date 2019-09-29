@@ -15,18 +15,58 @@
 
 # Подсказка: используйте словарь для хранения ключей от еще не открытых комнат и множество для уже проверенных комнат.
 
+import os
+
 def import_text(rel_path) -> list:
-    """ Ввести из файла список строк """
-    pass
+    """ Ввести из файла список строк
+        Вводим текст из файла (относительный адрес)
+        Выдаём строку
+    >>> import_text('test_file_2.txt')
+    ['text, some text', '', 'some other text']
+    """
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, rel_path)
+    file = open(file_path, "rt", encoding="utf-8")
+    text = file.read().split("\n")
+
+    return text
 
 def import_initial_key(data_list) -> tuple:
-    """ Извлечь из списка данные о квартире Фёдора и имеющийся ключ """
-    pass
+    """ Извлечь из списка данные о квартире Фёдора и имеющийся ключ
+        сохранить как массив (tuple) чисел (int)
+    >>> A = ['4 0 1', '1 1,2 0,3 1,4 0', '3 0']
+    >>> import_initial_key(A)
+    (4, 0, 1)
+    """
+    key_line = data_list.pop(0)
+    key_list = key_line.split()
+    key_tuple = tuple(int(x) for x in key_list)
 
-def import_apartments(data_list) -> dict:
-    """ Извлечь из списка данные о квартирах соседей """
-    pass
+    return key_tuple
+
+def import_apartments(apts_list) -> dict:
+    """ Извлечь из списка данные о квартирах соседей
+    >>> A = ['1 1,2 0,3 1,4 0', '3 0', '5 1,6 0', '',]
+    >>> import_apartments(A)
+    {0: [(1, 1), (2, 0), (3, 1), (4, 0)], 1: [(3, 0)], 2: [(5, 1), (6, 0)], 3: None}
+    """
+    i = 0
+    apts_table = dict()
+    for apt in apts_list:
+        if apt == '':
+            apts_table[i] = None
+        else:
+            apts_table[i] = []
+            for key_pair in apt.split(','):
+                m, k = key_pair.split()
+                apts_table[i].append((int(m), int(k)))
+        i += 1
+    return apts_table
 
 def find_key():
     """ Пройтись по квартирам и найти ключ"""
     pass
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
