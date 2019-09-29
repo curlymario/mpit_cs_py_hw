@@ -70,3 +70,10 @@ def find_key():
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+
+    data_list = import_text('fedor.txt')
+    fedor_apt, apt, key = import_initial_key(data_list)
+    apt_table = import_apartments(data_list)
+    opened_apts = [None]*len(apt_table)
+    find_key()
+    return opened_apts[fedor_apt]
