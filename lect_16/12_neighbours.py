@@ -63,17 +63,27 @@ def import_apartments(apts_list) -> dict:
         i += 1
     return apts_table
 
-def find_key():
+def find_key(key_tuple, apt_table):
     """ Пройтись по квартирам и найти ключ"""
-    pass
+    fedor_apt, current_apt, current_key = key_tuple
+    unlocked_apts = [None] * len(apt_table)
+    unlocked_apts[current_apt] = current_key
+    for i in range(len(apt_table[current_apt])):
+        apt, key = apt_table[current_apt][i]
+        real_apt = apt - current_key
+        if real_apt == fedor_apt:
+            return key
+        unlocked_apts[real_apt] = key
+
+
+
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
 
     data_list = import_text('fedor.txt')
-    fedor_apt, apt, key = import_initial_key(data_list)
+    key_tuple = import_initial_key(data_list)
     apt_table = import_apartments(data_list)
-    opened_apts = [None]*len(apt_table)
-    find_key()
+    find_key(key_tuple, apt_table)
     return opened_apts[fedor_apt]
