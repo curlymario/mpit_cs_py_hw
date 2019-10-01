@@ -38,3 +38,10 @@ settings.json
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Local IDE Settings #
+######################
+.idea
+.idea/*
+.vscode
+.vscode/*
