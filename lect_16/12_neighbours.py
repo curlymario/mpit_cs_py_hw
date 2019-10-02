@@ -17,6 +17,7 @@
 
 import os
 
+
 def import_text(rel_path) -> list:
     """ Ввести из файла список строк
         Вводим текст из файла (относительный адрес)
@@ -31,6 +32,7 @@ def import_text(rel_path) -> list:
 
     return text
 
+
 def import_initial_key(data_list) -> tuple:
     """ Извлечь из списка данные о квартире Фёдора и имеющийся ключ
         сохранить как массив (tuple) чисел (int)
@@ -43,6 +45,7 @@ def import_initial_key(data_list) -> tuple:
     key_tuple = tuple(int(x) for x in key_list)
 
     return key_tuple
+
 
 def import_apartments(apts_list) -> dict:
     """ Извлечь из списка данные о квартирах соседей
@@ -63,27 +66,34 @@ def import_apartments(apts_list) -> dict:
         i += 1
     return apts_table
 
-def find_key(key_tuple, apt_table):
-    """ Пройтись по квартирам и найти ключ"""
-    fedor_apt, current_apt, current_key = key_tuple
+
+def find_key(text_file):
+    """ Пройтись по квартирам и найти ключ
+    >>> find_key('fedor.txt')
+    1
+    """
+    data_list = import_text(text_file)
+    fedor_apt, base_apt, base_key = import_initial_key(data_list)
+    apt_table = import_apartments(data_list)
+
+    current_apt, current_key = base_apt, base_key
+
     unlocked_apts = [None] * len(apt_table)
     unlocked_apts[current_apt] = current_key
-    for i in range(len(apt_table[current_apt])):
-        apt, key = apt_table[current_apt][i]
-        real_apt = apt - current_key
-        if real_apt == fedor_apt:
-            return key
-        unlocked_apts[real_apt] = key
 
-
+    while apt_table:
+        for i in range(len(unlocked_apts)):
+            current_apt = i
+            if unlocked_apts[current_apt] is not None:
+                current_key = unlocked_apts[current_apt]
+                while apt_table[current_apt]:
+                    apt, key = apt_table[current_apt].pop()
+                    real_apt = apt - current_key
+                    unlocked_apts[real_apt] = key
+                del apt_table[current_apt]
+    return unlocked_apts[fedor_apt]
 
 
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-    data_list = import_text('fedor.txt')
-    key_tuple = import_initial_key(data_list)
-    apt_table = import_apartments(data_list)
-    find_key(key_tuple, apt_table)
-    return opened_apts[fedor_apt]
