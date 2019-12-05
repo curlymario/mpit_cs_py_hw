@@ -20,54 +20,58 @@ clock = pygame.time.Clock()
 frict = 0.01
 balls = []
 
+class Vector:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
 class Ball:
     def __init__(self, x, y, radius):
         self.x = x
         self.y = y
-        self.vx = 0
-        self.vy = 0
+        self.velocity = Vector(0, 0)
         self.radius = radius
         balls.append(self)
 
     def _update_friction(self, frict):
-        if self.vx != 0:
-            self.vx -= frict * self.vx
-        if self.vy != 0:
-            self.vy -= frict * self.vy
+        if self.velocity.x != 0:
+            self.velocity.x -= frict * self.velocity.x
+        if self.velocity.y != 0:
+            self.velocity.y -= frict * self.velocity.y
 
     def _change_coord(self, dt):
-        self.x += self.vx * dt
-        self.y += self.vy * dt
+        self.x += self.velocity.x * dt
+        self.y += self.velocity.y * dt
 
     def _bounce_walls(self, width, height):
         if self.x > width - self.radius:
             self.x = width - self.radius
-            self.vx *= -1
+            self.velocity.x *= -1
         if self.x < 0 + self.radius:
             self.x = 0 + self.radius
-            self.vx *= -1
+            self.velocity.x *= -1
         if self.y > height - self.radius:
             self.y = height - self.radius
-            self.vy *= -1
+            self.velocity.y *= -1
         if self.y < 0 + self.radius:
             self.y = 0 + self.radius
-            self.vy *= -1
+            self.velocity.y *= -1
 
     def draw(self, screen):
-        self.green = 255 if int(abs(self.vx)) >= 255 else int(abs(self.vx))
-        self.blue = 255 if int(abs(self.vy)) >= 255 else int(abs(self.vy))
+        self.green = 255 if int(abs(self.velocity.x)) >= 255 else int(abs(self.velocity.x))
+        self.blue = 255 if int(abs(self.velocity.y)) >= 255 else int(abs(self.velocity.y))
         pygame.draw.circle(screen, (150, self.green, self.blue), (int(self.x), int(self.y)), self.radius)
 
 
     def input(self):
         if pygame.key.get_pressed()[pygame.K_LEFT]:
-            self.vx -= 10
+            self.velocity.x -= 10
         if pygame.key.get_pressed()[pygame.K_RIGHT]:
-            self.vx += 10
+            self.velocity.x += 10
         if pygame.key.get_pressed()[pygame.K_UP]:
-            self.vy -= 10
+            self.velocity.y -= 10
         if pygame.key.get_pressed()[pygame.K_DOWN]:
-            self.vy += 10
+            self.velocity.y += 10
 
     def move(self, dt, frict, width, height):
         self._change_coord(dt)
