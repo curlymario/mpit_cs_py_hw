@@ -8,18 +8,6 @@ import pygame
 # Так вот, при упругом соударении, движение по первой оси изменится также, как если это былобы лобовое соударение шаров,
 # а по второй - не изменится.
 
-pygame.init()
-
-width = 500
-height = 500
-
-screen = pygame.display.set_mode((width, height))
-pygame.display.set_caption('YAHOOOO')
-clock = pygame.time.Clock()
-
-frict = 0.01
-balls = []
-
 class Vector:
     def __init__(self, x=0, y=0):
         self.x = x
@@ -58,7 +46,7 @@ class Vector:
         >>> b = Vector(1, 3)
         >>> c = a + b
         >>> print(c.x, c.y)
-        2, 5
+        2 5
         """
         result = Vector()
         result.x = self.x + other.x
@@ -73,7 +61,7 @@ class Vector:
         >>> b = Vector(1, 3)
         >>> c = a - b
         >>> print(c.x, c.y)
-        0, -1
+        0 -1
         """
         result = Vector()
         result.x = self.x - other.x
@@ -150,22 +138,38 @@ class Ball:
         self._update_friction(frict)
         self._bounce_walls(width, height)
 
+if __name__ == '__main__':
+    import doctest
 
-b1 = Ball(30, 30, 20)
-b2 = Ball(480, 480, 10)
+    doctest.testmod()
 
-while True:
-    dt = clock.tick(50) / 1000.0
+    pygame.init()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-            sys.exit()
+    width = 500
+    height = 500
 
-    screen.fill((0, 0, 0))
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption('YAHOOOO')
+    clock = pygame.time.Clock()
 
-    for ball in balls:
-        ball.input()
-        ball.move(dt, frict, width, height)
-        ball.draw(screen)
+    frict = 0.01
+    balls = []
 
-    pygame.display.flip()
+    b1 = Ball(30, 30, 20)
+    b2 = Ball(480, 480, 10)
+
+    while True:
+        dt = clock.tick(50) / 1000.0
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                sys.exit()
+
+        screen.fill((0, 0, 0))
+
+        for ball in balls:
+            ball.input()
+            ball.move(dt, frict, width, height)
+            ball.draw(screen)
+
+        pygame.display.flip()
