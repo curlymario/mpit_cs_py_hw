@@ -21,15 +21,49 @@ frict = 0.01
 balls = []
 
 class Vector:
-    def __init__(self, x, y):
+    def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
 
+    def __add__(self, other):
+        """
+        Returns the vector addition of self and other
+        :type other: Vector
+        >>> a = Vector(1, 2)
+        >>> b = Vector(1, 3)
+        >>> c = a + b
+        >>> print(c.x, c.y)
+        2, 5
+        """
+        result = Vector()
+        result.x = self.x + other.x
+        result.y = self.y + other.y
+        return result
+
+    def __sub__(self, other):
+        """
+        Returns the vector subtraction of self and other
+        :type other: Vector
+        >>> a = Vector(1, 2)
+        >>> b = Vector(1, 3)
+        >>> c = a - b
+        >>> print(c.x, c.y)
+        0, -1
+        """
+        result = Vector()
+        result.x = self.x - other.x
+        result.y = self.y - other.y
+        return result
+
 class Ball:
     def __init__(self, x, y, radius):
-        self.x = x
-        self.y = y
-        self.velocity = Vector(0, 0)
+        """
+        :type x: int
+        :type y: int
+        :type radius: int
+        """
+        self.position = Vector(x, y)
+        self.velocity = Vector()
         self.radius = radius
         balls.append(self)
 
@@ -40,27 +74,30 @@ class Ball:
             self.velocity.y -= frict * self.velocity.y
 
     def _change_coord(self, dt):
-        self.x += self.velocity.x * dt
-        self.y += self.velocity.y * dt
+        self.position.x += self.velocity.x * dt
+        self.position.y += self.velocity.y * dt
 
     def _bounce_walls(self, width, height):
-        if self.x > width - self.radius:
-            self.x = width - self.radius
+        if self.position.x > width - self.radius:
+            self.position.x = width - self.radius
             self.velocity.x *= -1
-        if self.x < 0 + self.radius:
-            self.x = 0 + self.radius
+        if self.position.x < 0 + self.radius:
+            self.position.x = 0 + self.radius
             self.velocity.x *= -1
-        if self.y > height - self.radius:
-            self.y = height - self.radius
+        if self.position.y > height - self.radius:
+            self.position.y = height - self.radius
             self.velocity.y *= -1
-        if self.y < 0 + self.radius:
-            self.y = 0 + self.radius
+        if self.position.y < 0 + self.radius:
+            self.position.y = 0 + self.radius
             self.velocity.y *= -1
 
     def draw(self, screen):
+        """
+        Draws the ball in its position in color defined by speed
+        """
         self.green = 255 if int(abs(self.velocity.x)) >= 255 else int(abs(self.velocity.x))
         self.blue = 255 if int(abs(self.velocity.y)) >= 255 else int(abs(self.velocity.y))
-        pygame.draw.circle(screen, (150, self.green, self.blue), (int(self.x), int(self.y)), self.radius)
+        pygame.draw.circle(screen, (150, self.green, self.blue), (int(self.position.x), int(self.position.y)), self.radius)
 
 
     def input(self):
