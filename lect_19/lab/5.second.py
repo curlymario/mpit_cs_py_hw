@@ -25,6 +25,31 @@ class Vector:
         self.x = x
         self.y = y
 
+    def dot_product(self, other):
+        """
+        returns scalar (inner, dot) product (int or float)
+        :param other: Vector
+        :return: int or float
+        >>> a = Vector(2, 2)
+        >>> b = Vector(2, 3)
+        >>> c = a * b
+        >>> print(c)
+        10
+        """
+        result = (self.x * self.y) + (other.x * other.y)
+        return result
+
+    def scalar_vector_mult(self, other):
+        """
+        returns scalar-vector product as new Vector
+        :param other: int or float
+        :return: Vector
+        """
+        result = Vector()
+        result.x = self.x * other
+        result.y = self.y * other
+        return result
+
     def __add__(self, other):
         """
         Returns the vector addition of self and other
@@ -54,6 +79,16 @@ class Vector:
         result.x = self.x - other.x
         result.y = self.y - other.y
         return result
+
+    def __mul__(self, other):
+        """
+        if multiplied by number, returns scalar-vector product (vector)
+        if multiplied by other vector, returns scalar product (int or float)
+        """
+        if type(other) == type(self):
+            return self.dot_product(other)
+        if type(other) == type(1) or type(other) == type(1.0):
+            return self.scalar_vector_mult(other)
 
 class Ball:
     def __init__(self, x, y, radius):
