@@ -9,6 +9,11 @@ import pygame
 # а по второй - не изменится.
 
 class Vector:
+    """
+    Simple 2D Vector. Yes, I know it can be easily made into multiple-vector by using tuples,
+    but for this lab I only need simple 2D vector
+    I keep it as simple and obvious as possible to better understand what I’m doing
+    """
     def __init__(self, x=0, y=0):
         self.x = x
         self.y = y
@@ -32,6 +37,11 @@ class Vector:
         returns scalar-vector product as new Vector
         :param other: int or float
         :return: Vector
+        >>> a = Vector(1, 2)
+        >>> b = 10
+        >>> c = a * b
+        >>> print(c.x, c.y)
+        10 20
         """
         result = Vector()
         result.x = self.x * other
