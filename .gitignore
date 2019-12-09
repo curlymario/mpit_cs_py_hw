@@ -1,5 +1,6 @@
 *.pyc
-settings.json
+
+venv/*
 
 # Compiled source #
 ###################

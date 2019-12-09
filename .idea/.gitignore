@@ -2,5 +2,6 @@
 /workspace.xml
 # Local IDE Settings #
 ######################
-/*.iml
-/*.xml
+/**.iml
+/**.xml
+/misc.xml
