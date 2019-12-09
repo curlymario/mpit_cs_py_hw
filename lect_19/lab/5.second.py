@@ -1,5 +1,8 @@
 import sys
+from typing import Dict, Any
+
 import pygame
+import math
 
 # Добавляем второй шарик. И пишем соударение шаров.
 # Соударение шаров рассчитывается так: нужно разложить движение по двум осям:
@@ -48,6 +51,28 @@ class Vector:
         result.y = self.y * other
         return result
 
+    def length(self):
+        """
+        returns length of vector
+        :return: float
+        >>> a = Vector(5, 12)
+        >>> a.length()
+        13.0
+        """
+        return math.sqrt(self.x**2 + self.y**2)
+
+    def normalize(self):
+        """
+        :return: float
+        >>> a = Vector(5, 12)
+        >>> a.normalize()
+        (0.38461538461538464, 0.9230769230769231)
+        """
+        norm_x = self.x / self.length()
+        norm_y = self.y / self.length()
+        return norm_x, norm_y
+
+
     def __add__(self, other):
         """
         Returns the vector addition of self and other
@@ -89,7 +114,7 @@ class Vector:
             return self.scalar_vector_mult(other)
 
 class Ball:
-    def __init__(self, x, y, radius):
+    def __init__(self, x, y, radius, balls_list=[]):
         """
         :type x: int
         :type y: int
@@ -98,17 +123,32 @@ class Ball:
         self.position = Vector(x, y)
         self.velocity = Vector()
         self.radius = radius
-        balls.append(self)
+        self.balls = balls_list
+        self.balls.append(self)
 
-    def _update_friction(self, frict):
-        if self.velocity.x != 0:
-            self.velocity.x -= frict * self.velocity.x
-        if self.velocity.y != 0:
-            self.velocity.y -= frict * self.velocity.y
+    def _update_friction(self, friction):
+        """
+        :param friction: float
+        >>> a = Ball(30, 30, 10)
+        >>> a.velocity = Vector(30, 30)
+        >>> a._update_friction(0.3)
+        >>> print(a.velocity.x, a.velocity.y)
+        9.0 9.0
+        """
+        self.velocity *= friction
 
     def _change_coord(self, dt):
-        self.position.x += self.velocity.x * dt
-        self.position.y += self.velocity.y * dt
+        """
+        update position according to velocity and FPS (clock tick / 1000)
+        :param dt: float
+        >>> dt = 50 / 1000.0
+        >>> a = Ball(10, 10, 5)
+        >>> a.velocity = Vector(100, 100)
+        >>> a._change_coord(dt)
+        >>> print(a.position.x, a.position.y)
+        15.0 15.0
+        """
+        self.position += self.velocity * dt
 
     def _bounce_walls(self, width, height):
         if self.position.x > width - self.radius:
@@ -124,6 +164,23 @@ class Ball:
             self.position.y = 0 + self.radius
             self.velocity.y *= -1
 
+    def _bounce_others(self):
+        for ball in self.balls:
+            if ball is not self:
+                reach = self.position - ball.position
+                distance = reach.length()
+                if distance < self.radius + ball.radius: # if balls collapse
+                    direction = Vector(*reach.normalize())
+                    cross = Vector(direction.y, - direction.x)
+                    if cross * self.velocity < 0: # checking direction
+                        cross.x *= -1
+                        cross.y *= -1
+                    direction.x, direction.y = -direction.x, -direction.y # bounce
+                    new_direction = cross + direction
+                    newvelocity = new_direction * self.velocity.length()
+                    self.velocity = newvelocity
+
+
     def draw(self, screen):
         """
         Draws the ball in its position in color defined by speed
@@ -131,7 +188,6 @@ class Ball:
         self.green = 255 if int(abs(self.velocity.x)) >= 255 else int(abs(self.velocity.x))
         self.blue = 255 if int(abs(self.velocity.y)) >= 255 else int(abs(self.velocity.y))
         pygame.draw.circle(screen, (150, self.green, self.blue), (int(self.position.x), int(self.position.y)), self.radius)
-
 
     def input(self):
         if pygame.key.get_pressed()[pygame.K_LEFT]:
@@ -143,10 +199,6 @@ class Ball:
         if pygame.key.get_pressed()[pygame.K_DOWN]:
             self.velocity.y += 10
 
-    def move(self, dt, frict, width, height):
-        self._change_coord(dt)
-        self._update_friction(frict)
-        self._bounce_walls(width, height)
 
 if __name__ == '__main__':
     import doctest
@@ -162,11 +214,11 @@ if __name__ == '__main__':
     pygame.display.set_caption('YAHOOOO')
     clock = pygame.time.Clock()
 
-    frict = 0.01
+    frict = 0.99
     balls = []
 
-    b1 = Ball(30, 30, 20)
-    b2 = Ball(480, 480, 10)
+    b1 = Ball(30, 30, 20, balls)
+    b2 = Ball(480, 480, 10, balls)
 
     while True:
         dt = clock.tick(50) / 1000.0
@@ -179,7 +231,12 @@ if __name__ == '__main__':
 
         for ball in balls:
             ball.input()
-            ball.move(dt, frict, width, height)
+        for ball in balls:
+            ball._update_friction(frict)
+            ball._bounce_walls(width, height)
+            ball._bounce_others()
+            ball._change_coord(dt)
+        for ball in balls:
             ball.draw(screen)
 
         pygame.display.flip()
