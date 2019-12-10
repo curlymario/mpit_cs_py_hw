@@ -273,10 +273,13 @@ if __name__ == '__main__':
         for ball in balls:
             ball.input()
         for ball in balls:
-            ball._update_friction(frict)
             ball._bounce_walls(width, height)
+        for ball in balls:
             ball._bounce_others()
+        for ball in balls:
             ball._change_coord(dt)
+        for ball in balls:
+            ball._update_friction(frict)
         for ball in balls:
             ball.draw(screen)
 
