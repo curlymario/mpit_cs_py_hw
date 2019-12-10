@@ -11,6 +11,34 @@ import math
 # Так вот, при упругом соударении, движение по первой оси изменится также, как если это былобы лобовое соударение шаров,
 # а по второй - не изменится.
 
+class Matrix:
+    def __init__(self, a1, a2, a3, a4):
+        self.A = [a1, a2, a3, a4]
+
+    def return_determinant(self):
+        return self.A[0]*self.A[3] + self.A[1]*self.A[2]
+
+    def minor(self):
+        self.A[0], self.A[3] = self.A[3], self.A[0]
+        self.A[1], self.A[2] = self.A[2], self.A[1]
+
+    def adjunct(self):
+        self.A[1] *= -1
+        self.A[2] *= -1
+
+    def transpone(self):
+        self.A[1], self.A[2] = self.A[2], self.A[1]
+
+    def inverse(self):
+        d = self.return_determinant()
+        self.minor()
+        self.adjunct()
+        self.transpone()
+        if d != 0:
+            for i in self.A:
+                i /= d
+
+
 class Vector:
     """
     Simple 2D Vector. Yes, I know it can be easily made into multiple-vector by using tuples,
@@ -167,18 +195,31 @@ class Ball:
     def _bounce_others(self):
         for ball in self.balls:
             if ball is not self:
-                reach = self.position - ball.position
-                distance = reach.length()
-                if distance < self.radius + ball.radius: # if balls collapse
-                    direction = Vector(*reach.normalize())
-                    cross = Vector(direction.y, - direction.x)
-                    if cross * self.velocity < 0: # checking direction
-                        cross.x *= -1
-                        cross.y *= -1
-                    direction.x, direction.y = -direction.x, -direction.y # bounce
-                    new_direction = cross + direction
-                    newvelocity = new_direction * self.velocity.length()
-                    self.velocity = newvelocity
+                path = self.position - ball.position
+                distance = path.length() - (self.radius + ball.radius)
+                if distance <= 0:
+                    # Создаём новый базис и раскладываем его по осям координат:
+                    collapse_direction = Vector(*path.normalize())
+                    cross_direction = Vector(collapse_direction.y, - collapse_direction.x)
+                    # collapse_direction и cross_direction — ортонормированные векторы
+                    # раскладываем velocity по новому базису
+                    # находим матрицу перехода между базисами
+                    A = Matrix(collapse_direction.x, collapse_direction.y, cross_direction.x, cross_direction.y)
+                    if A.return_determinant() != 0 and A.return_determinant() != 0.0:
+                        A.inverse()
+                        # находим вектор движения в новом базисе
+                        newbasis_velocity = Vector()
+                        newbasis_velocity.x = (A.A[0] * self.velocity.x) + (A.A[2] * self.velocity.y)
+                        newbasis_velocity.y = (A.A[1] * self.velocity.x) + (A.A[3] * self.velocity.y)
+                        collapse_direction.x, collapse_direction.y = -collapse_direction.x, -collapse_direction.y # bounce
+                        # собираем обратно
+                        new_velocity = Vector()
+                        new_velocity.x = (collapse_direction.x * newbasis_velocity.x) + (cross_direction.x * newbasis_velocity.y)
+                        new_velocity.y = (collapse_direction.y * newbasis_velocity.x) + (cross_direction.y * newbasis_velocity.y)
+                        self.velocity = new_velocity
+                    else:
+                        self.velocity.x *= -1
+                        self.velocity.y *= -1
 
 
     def draw(self, screen):
