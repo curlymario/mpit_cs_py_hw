@@ -152,7 +152,6 @@ class Ball:
         self.velocity = Vector()
         self.radius = radius
         self.balls = balls_list
-        self.balls.append(self)
 
     def _update_friction(self, friction):
         """
@@ -194,7 +193,7 @@ class Ball:
 
     def _bounce_others(self):
         for ball in self.balls:
-            if ball is not self:
+            if ball != self:
                 path = self.position - ball.position
                 distance = path.length() - (self.radius + ball.radius)
                 if distance <= 0:
@@ -258,8 +257,8 @@ if __name__ == '__main__':
     frict = 0.99
     balls = []
 
-    b1 = Ball(30, 30, 20, balls)
-    b2 = Ball(480, 480, 10, balls)
+    balls.append(Ball(30, 30, 20, balls))
+    balls.append(Ball(480, 480, 10, balls))
 
     while True:
         dt = clock.tick(50) / 1000.0
@@ -267,6 +266,9 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+                x, y = pygame.mouse.get_pos()
+                balls.append(Ball(x, y, 15, balls))
 
         screen.fill((0, 0, 0))
 
