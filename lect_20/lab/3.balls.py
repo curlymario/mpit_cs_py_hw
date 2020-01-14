@@ -1,5 +1,4 @@
-import sys
-import pygame
+import sys, pygame, math
 
 
 class Vector:
@@ -31,6 +30,16 @@ class Vector:
         (0, -1)
         """
         return Vector(self.x - other.x, self.y - other.y)
+
+    def length(self):
+        """
+        returns length of vector
+        :return: float
+        >>> a = Vector(5, 12)
+        >>> a.length()
+        13.0
+        """
+        return math.sqrt(self.x**2 + self.y**2)
 
     def dot_product(self, other):
         """
@@ -95,10 +104,7 @@ class Ball:
         self.position = Vector(x, y)
         self.velocity = Vector(0, 0)
         self.radius = radius
-
-        self.red = 150
-        self.green = 20
-        self.blue = 20
+        self.selected = False
 
     def input(self):
         if pygame.key.get_pressed()[pygame.K_LEFT]:
@@ -132,6 +138,11 @@ class Ball:
         self.velocity *= frict
         self.position += self.velocity * dt
 
+    def update_selection(self, old_selection):
+        if isinstance(old_selection, Ball):
+            old_selection.selected = False
+        self.selected = True
+
     def render(self, canvas):
         # velocity = self.velocity.intpair()
         position = self.position.intpair()
@@ -140,7 +151,31 @@ class Ball:
         # green = 255 if abs(velocity[0]) >= 255 else abs(velocity[0])
         # blue = 255 if abs(velocity[1]) >= 255 else abs(velocity[1])
 
+        if self.selected:
+            self.red, self.green, self.blue = 150, 50, 50
+        else:
+            self.red, self.green, self.blue = 150, 20, 20
+
         pygame.draw.circle(canvas, (self.red, self.green, self.blue), (position[0], position[1]), self.radius)
+
+
+def mouse_click_action(balls, current_selection, cursor_position):
+    """
+    select ball and unselect previously selected
+    if non selected create new
+    return selected ball
+    :param current_selection: Ball
+    :return Ball
+    """
+    for ball in balls:
+        distance = cursor_position - ball.position
+        if distance.length() <= ball.radius:
+            ball.update_selection(current_selection)
+            return ball
+    new_ball = Ball(*cursor_position.intpair(), 15)
+    balls.append(new_ball)
+    new_ball.update_selection(current_selection)
+    return new_ball
 
 
 if __name__ == '__main__':
@@ -162,17 +197,25 @@ if __name__ == '__main__':
     balls.append(Ball(30, 30, 20))
     balls.append(Ball(480, 480, 10))
 
+    selection = None
+
     while True:
         dt = clock.tick(50) / 1000.0
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 sys.exit()
+            if event.type == pygame.MOUSEBUTTONUP:
+                click = Vector(*pygame.mouse.get_pos())
+                selection = mouse_click_action(balls, selection, click)
+
+
 
         screen.fill((0, 0, 0))
 
         for ball in balls:
-            ball.input()
+            if ball.selected:
+                ball.input()
             ball.update(dt, friction)
             ball.render(screen)
 
