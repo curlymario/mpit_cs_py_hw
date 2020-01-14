@@ -151,14 +151,19 @@ class Ball:
             old_selection.selected = False
         self.selected = True
 
-    def check_collision(self, other_ball):
-        path = self.position - other_ball.position
-        distance = path.length() - (self.radius + other_ball.radius)
+    def check_collision(self, other):
+        path = self.position - other.position
+        distance = path.length() - (self.radius + other.radius)
         if distance <= 0:
-            self_impulse = ((other_ball.velocity - self.velocity) * path.normalize()) * path.normalize()
-            other_impulse = ((self.velocity - other_ball.velocity) * path.normalize()) * path.normalize()
-            self.velocity += self_impulse
-            other_ball.velocity += other_impulse
+            norm = path.normalize()
+            self_p = self.velocity * self.radius
+            other_p = other.velocity * other.radius
+            self_dp = (((other.radius * -2) / (self.radius + other.radius) * self_p +
+                       (self.radius * 2) / (self.radius + other.radius) * other_p) * norm) * norm
+            other_dp = (((self.radius* 2) / (self.radius + other.radius) * other_p  +
+                         (other.radius * -2) / (self.radius + other.radius) * self_p) * norm) *norm
+            self.velocity += self_dp * (1 / (2 * self.radius))
+            other.velocity += other_dp * (1 / (2 * other.radius))
 
 
     def render(self, canvas):
