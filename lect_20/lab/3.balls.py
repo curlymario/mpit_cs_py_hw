@@ -41,6 +41,14 @@ class Vector:
         """
         return math.sqrt(self.x**2 + self.y**2)
 
+    def normalize(self):
+        """
+        :return: float
+        >>> print(Vector(5, 12).normalize())
+        (0.38461538461538464, 0.9230769230769231)
+        """
+        return Vector(self.x / self.length(), self.y / self.length())
+
     def dot_product(self, other):
         """
         returns scalar (inner, dot) product (int or float)
@@ -49,7 +57,7 @@ class Vector:
         >>> print(Vector(2, 2) * Vector(2, 3))
         10
         """
-        return (self.x * self.y) + (other.x * other.y)
+        return (self.x * other.x) + (self.y * other.y)
 
     def scalar_vector_mult(self, num):
         """
@@ -143,6 +151,16 @@ class Ball:
             old_selection.selected = False
         self.selected = True
 
+    def check_collision(self, other_ball):
+        path = self.position - other_ball.position
+        distance = path.length() - (self.radius + other_ball.radius)
+        if distance <= 0:
+            self_impulse = ((other_ball.velocity - self.velocity) * path.normalize()) * path.normalize()
+            other_impulse = ((self.velocity - other_ball.velocity) * path.normalize()) * path.normalize()
+            self.velocity += self_impulse
+            other_ball.velocity += other_impulse
+
+
     def render(self, canvas):
         # velocity = self.velocity.intpair()
         position = self.position.intpair()
@@ -159,7 +177,7 @@ class Ball:
         pygame.draw.circle(canvas, (self.red, self.green, self.blue), (position[0], position[1]), self.radius)
 
 
-def mouse_click_action(balls, current_selection, cursor_position):
+def mouse_click_action(balls_list, current_selection, cursor_position):
     """
     select ball and unselect previously selected
     if non selected create new
@@ -167,13 +185,13 @@ def mouse_click_action(balls, current_selection, cursor_position):
     :param current_selection: Ball
     :return Ball
     """
-    for ball in balls:
+    for ball in balls_list:
         distance = cursor_position - ball.position
         if distance.length() <= ball.radius:
             ball.update_selection(current_selection)
             return ball
     new_ball = Ball(*cursor_position.intpair(), 15)
-    balls.append(new_ball)
+    balls_list.append(new_ball)
     new_ball.update_selection(current_selection)
     return new_ball
 
@@ -216,7 +234,14 @@ if __name__ == '__main__':
         for ball in balls:
             if ball.selected:
                 ball.input()
+        other_balls = [x for x in balls]
+        for ball in balls:
+            other_balls.remove(ball)
+            for other_ball in other_balls:
+                ball.check_collision(other_ball)
+        for ball in balls:
             ball.update(dt, friction)
+        for ball in balls:
             ball.render(screen)
 
         pygame.display.flip()
