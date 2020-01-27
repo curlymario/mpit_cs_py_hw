@@ -29,17 +29,17 @@ i = j-1 // 2
 
 # Релизация кучи по минимуму:
 
-Class Heap:
+class Heap:
     def __init__(self):
         self.values = []
         self.size = 0
 
     def insert(self, x):
         self.values.append(x)
-        self.size +=1
-        self.shift_up(self, size-1)
+        self.size += 1
+        self.shift_up(self.size-1)
 
-    def shitf_up(self, i)
+    def shift_up(self, i):
         while i != 0 and self.values[i] < self.values[(i-1)//2]:
             self.values[i], self.values[(i-1)//2] = self.values[(i-1)//2], self.values[i]
 
@@ -49,11 +49,11 @@ Class Heap:
         min = self.values[0]
         self.values[0] = self.values.pop()
         self.size -= 1
-        self.shif_down(0)
+        self.shift_down(0)
         return min
 
     def shift_down(self, i):
-        while i*2 + 1 < self.size
+        while i*2 + 1 < self.size:
             j = i
             if self.values[i*2 + 1] < self.values[i]:
                 j = i*2 + 1
@@ -108,7 +108,7 @@ def heapify_fast(array):
     heap = Heap()
     heap.values = array[:]
     heap.size = len(array)
-    for i in reversed(range(n//2)):
+    for i in reversed(range(heap.size//2)):
         heap.shift_down(i)
     return heap
 """
